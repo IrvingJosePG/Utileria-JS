@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario Principal</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+
+<body>
+
+    <div class="contenedor-formulario">
+        <h1>Formulario de Usuario</h1>
+        <p class="subtitulo">Completa los datos para calcular tu edad y validar tu informacion</p>
+
+        <form class="formulario" id="formRegistro">
+            <div class="grupo-formulario">
+                <label for="nombre">Nombre completo</label>
+                <input type="text" id="nombre" placeholder="Ej. Juan Perez">
+                <!-- span para el error del nombre -->
+                <span id="errorNombre" class="mensaje-error"></span>
+            </div>
+
+            <div class="grupo-formulario">
+                <label for="telefono">Teléfono (10 digitos)</label>
+                <input type="text" id="telefono" placeholder="Ej. 9512345678">
+                <!-- span para el error del teléfono -->
+                <span id="errorTelefono" class="mensaje-error"></span>
+            </div>
+
+            <div class="grupo-formulario">
+                <label for="fechaNacimiento">Fecha de Nacimiento</label>
+                <input type="date" id="fechaNacimiento">
+                <span id="errorFecha" class="mensaje-error"></span>
+            </div>
+
+            <button type="submit" class="boton-enviar">
+                Procesar <span> → </span>
+            </button>
+        </form>
+
+        <div style="margin-top: 20px; text-align: center;">
+            <a href="login.html" style="color: var(--color-primario); text-decoration: none; font-weight: 500; font-size: 14px;">
+                Ir al inicio de sesión →
+            </a>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="modalEdad">
+        <div class="modal-contenido">
+            <h2 style="color: var(--color-primario); margin-bottom: 12px; font-size: 20px; font-weight: 600;">Resultado del Análisis</h2>
+            <p id="textoModal" style="margin-bottom: 24px; color: var(--color-texto); font-size: 15px;"></p>
+            <button type="button" class="boton-enviar" id="cerrarModal">Aceptar</button>
+        </div>
+    </div>
+
+    <script src="js/utileria.js"></script>
+    
+    <script>
+        var formRegistro = document.getElementById("formRegistro");
+        var inputNombre = document.getElementById("nombre");
+        var inputTelefono = document.getElementById("telefono");
+        var inputFecha = document.getElementById("fechaNacimiento");
+
+        // spans de error
+        var errorNombre = document.getElementById("errorNombre");
+        var errorTelefono = document.getElementById("errorTelefono");
+        var errorFecha = document.getElementById("errorFecha");
+
+        // modal
+        var modalEdad = document.getElementById("modalEdad");
+        var textoModal = document.getElementById("textoModal");
+        var cerrarModal = document.getElementById("cerrarModal");
+
+        formRegistro.addEventListener("submit", function(evento) {
+            evento.preventDefault();
+
+            var nombreVal = inputNombre.value.trim();
+            var telVal = inputTelefono.value.trim();
+            var fechaVal = inputFecha.value;
+
+            errorNombre.textContent = "";
+            errorTelefono.textContent = "";
+            errorFecha.textContent = "";
+            inputNombre.classList.remove("campo-error");
+            inputTelefono.classList.remove("campo-error");
+            inputFecha.classList.remove("campo-error");
+
+            // VALIDACIONES
+            if (!soloLetras(nombreVal)) {
+                errorNombre.textContent = "El nombre solo debe contener letras y espacios.";
+                inputNombre.classList.add("campo-error");
+            }
+
+            if (!esSoloNumeros(telVal)) {
+                errorTelefono.textContent = "El teléfono solo debe contener números.";
+                inputTelefono.classList.add("campo-error");
+            } else if (!validarLongitud(telVal, 10)) {
+                errorTelefono.textContent = "El teléfono excede o no cumple con la longitud permitida (10 Digitos).";
+                inputTelefono.classList.add("campo-error");
+            }
+
+            if (fechaVal === "") {
+                errorFecha.textContent = "Por favor, ingresa tu fecha de nacimiento.";
+                inputFecha.classList.add("campo-error");
+            } else if (calcularEdad(fechaVal) < 0) {
+                errorFecha.textContent = "La fecha de nacimiento no es valida.";
+                inputFecha.classList.add("campo-error");
+            }
+
+            if (errorNombre.textContent || errorTelefono.textContent || errorFecha.textContent) {
+                return;
+            }
+
+            // Mostrar modal si pasas verificaciones
+            var edadCalculada = calcularEdad(fechaVal);
+            var esMayor = esMayorDeEdad(fechaVal);
+            var nombreFormateado = formatearNombre(nombreVal);
+
+            var mensaje = "Hola " + nombreFormateado + ", tienes " + edadCalculada + " años. ";
+            if (esMayor) {
+                mensaje += "Eres mayor de edad.";
+            } else {
+                mensaje += "Eres menor de edad.";
+            }
+
+            textoModal.textContent = mensaje;
+            modalEdad.style.display = "flex";
+        });
+        
+        cerrarModal.addEventListener("click", function() {
+            modalEdad.style.display = "none";
+            formRegistro.reset();
+        });
+    </script>
+</body>
+</html>
