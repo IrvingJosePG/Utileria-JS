@@ -94,10 +94,10 @@ let esMayor = esMayorDeEdad("2000-05-15"); // true
 
 ## 5. Demo Promocional
 
-**Enlace al video:**
+**Enlace al video:** https://youtu.be/RBy706iTYnw
 
 
 ## 6. Enlaces del Proyecto
 
-* **Repositorio del código:** 
-* **Proyecto en vivo (GitHub Pages):**
+* **Repositorio del código:** https://github.com/IrvingJosePG/Utileria-JS.git
+* **Proyecto en vivo (GitHub Pages):** 

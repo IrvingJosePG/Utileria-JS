@@ -56,7 +56,7 @@
         </div>
     </div>
 
-    <script src="js/utileria.js"></script>
+    <script src="./js/utileria.js"></script>
     
     <script>
         var formRegistro = document.getElementById("formRegistro");
@@ -89,16 +89,16 @@
             inputFecha.classList.remove("campo-error");
 
             // VALIDACIONES
-            if (!soloLetras(nombreVal)) {
-                errorNombre.textContent = "El nombre solo debe contener letras y espacios.";
+            if (!nombreVal || !soloLetras(nombreVal)) {
+                errorNombre.textContent = "Ingresa un nombre que solo contenga letras y espacios.";
                 inputNombre.classList.add("campo-error");
             }
 
             if (!esSoloNumeros(telVal)) {
                 errorTelefono.textContent = "El teléfono solo debe contener números.";
                 inputTelefono.classList.add("campo-error");
-            } else if (!validarLongitud(telVal, 10)) {
-                errorTelefono.textContent = "El teléfono excede o no cumple con la longitud permitida (10 Digitos).";
+            } else if (!validarLongitud(telVal, 10) || telVal.length !== 10) {
+                errorTelefono.textContent = "El teléfono debe tener exactamente 10 dígitos.";
                 inputTelefono.classList.add("campo-error");
             }
 
@@ -106,7 +106,7 @@
                 errorFecha.textContent = "Por favor, ingresa tu fecha de nacimiento.";
                 inputFecha.classList.add("campo-error");
             } else if (calcularEdad(fechaVal) < 0) {
-                errorFecha.textContent = "La fecha de nacimiento no es valida.";
+                errorFecha.textContent = "La fecha de nacimiento no puede ser en el futuro.";
                 inputFecha.classList.add("campo-error");
             }
 
